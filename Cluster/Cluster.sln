@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.106
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cluster", "Cluster\Cluster.csproj", "{AC0BF436-BA16-415D-A3F2-3777616DCBAF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cluster", "Cluster.csproj", "{AC0BF436-BA16-415D-A3F2-3777616DCBAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +20,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {1C70BFC5-FE42-4BC1-B674-69658325EA90}
+		SolutionGuid = {F019086E-6407-437F-9217-9D943BCFEA42}
 	EndGlobalSection
 EndGlobal

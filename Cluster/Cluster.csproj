@@ -43,8 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="City.cs" />
-    <Compile Include="FLows.cs" />
+    <Compile Include="Distance.cs" />
+    <Compile Include="Flow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

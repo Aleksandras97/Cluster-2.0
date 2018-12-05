@@ -1,0 +1,7 @@
+C:\Users\Aleksandras\source\repos\Cluster\obj\Debug\Cluster.csprojAssemblyReference.cache
+C:\Users\Aleksandras\source\repos\Cluster\obj\Debug\Cluster.csproj.CoreCompileInputs.cache
+C:\Users\Aleksandras\source\repos\Cluster\bin\Debug\Cluster.exe.config
+C:\Users\Aleksandras\source\repos\Cluster\bin\Debug\Cluster.exe
+C:\Users\Aleksandras\source\repos\Cluster\bin\Debug\Cluster.pdb
+C:\Users\Aleksandras\source\repos\Cluster\obj\Debug\Cluster.exe
+C:\Users\Aleksandras\source\repos\Cluster\obj\Debug\Cluster.pdb
