@@ -46,5 +46,25 @@ namespace Cluster
         {
             return string.Format("{0} {1} {2} {3} {4}", Key, Origin, Destination, Dis, Time);
         }
+
+        public String getOrigin()
+        {
+            return Origin;
+        }
+
+        public String getDestination()
+        {
+            return Destination;
+        }
+
+        public double getDistance()
+        {
+            return Dis;
+        }
+
+        public double getTime()
+        {
+            return Time;
+        }
     }
 }

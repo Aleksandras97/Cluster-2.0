@@ -38,6 +38,20 @@ namespace Cluster
             return string.Format("{0} {1} {2} {3} {4}", Load, Unload, Type, FlowTons, FlowTonKMs);
         }
 
+        public String getLoad()
+        {
+            return Load;
+        }
+        public String getUnload()
+        {
+            return Unload;
+        }
+
+        public double getTons()
+        {
+            return FlowTons;
+        }
+
         public string getType()
         {
             return Type;
