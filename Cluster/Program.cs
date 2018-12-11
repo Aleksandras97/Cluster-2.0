@@ -108,9 +108,9 @@ namespace Cluster
 
         //public static double CountPriceWithoutWarehouses(List<Distance> distances, List<Flow> flows, double distance)
         //{
-        //    double price = flows.Sum(x=> x.FlowTons) * Sunkvežimio_pristatymo_kaštai;
+        //    double price = flows.Sum(x => x.FlowTons) * Sunkvežimio_pristatymo_kaštai;
         //    double pollution = flows.Where(y => y.Type.Equals("Road")).Sum(x => x.FlowTons) * Sunkvežimio_emisijos_lygis;
-        //    double total = distance* (price + pollution);
+        //    double total = distance * (price + pollution);
         //    return total;
         //}
         public static double CountPriceWithoutWarehouses(List<Distance> distances, List<Flow> flows)
@@ -126,6 +126,7 @@ namespace Cluster
                     {
                         price += flow.getTons() * Sunkvežimio_pristatymo_kaštai * distance.getDistance();
                         price += flow.getTons() * Sunkvežimio_emisijos_lygis * distance.getDistance();
+                        break;
                     }
                 }
             }
