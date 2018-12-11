@@ -40,7 +40,7 @@ namespace Cluster
 
             double distance = distances.Sum(x => x.getDistance());
             double pasKaina = pastatuKaina(distances, Warehouses);
-            double kainaBeSandėlių = CountPriceWithoutWarehouses(distances, flows);
+            double kainaBeSandėlių = CountPriceWithoutWarehouses(distances, flows, distance);
             double transportavimoKaina = CountPriceWithWarehouses(distances, flows, Warehouses);
 
          //   WarehouseOptimization(distances, flows, out newWarehouses, out Price);
@@ -106,32 +106,14 @@ namespace Cluster
             return flows;
         }
 
-        //public static double CountPriceWithoutWarehouses(List<Distance> distances, List<Flow> flows, double distance)
-        //{
-        //    double price = flows.Sum(x => x.FlowTons) * Sunkvežimio_pristatymo_kaštai;
-        //    double pollution = flows.Where(y => y.Type.Equals("Road")).Sum(x => x.FlowTons) * Sunkvežimio_emisijos_lygis;
-        //    double total = distance * (price + pollution);
-        //    return total;
-        //}
-        public static double CountPriceWithoutWarehouses(List<Distance> distances, List<Flow> flows)
+        public static double CountPriceWithoutWarehouses(List<Distance> distances, List<Flow> flows, double distance)
         {
-            double price = 0;
-            for(int j = 0; j < flows.Count; j++)
-            {
-                Flow flow = flows[j];
-                for (int i = 0; i < distances.Count; i++)
-                {
-                    Distance distance = distances[i];
-                    if (distance.getOrigin().Equals(flow.getLoad()) && distance.getDestination().Equals(flow.getUnload()) && flow.getType().Equals("Road"))
-                    {
-                        price += flow.getTons() * Sunkvežimio_pristatymo_kaštai * distance.getDistance();
-                        price += flow.getTons() * Sunkvežimio_emisijos_lygis * distance.getDistance();
-                        break;
-                    }
-                }
-            }
-            return price;
+            double price = flows.Sum(x => x.getTons()) * Sunkvežimio_pristatymo_kaštai;
+            double pollution = flows.Sum(x => x.getTons()) * Sunkvežimio_emisijos_lygis;
+            double total = distance * (price + pollution);
+            return total;
         }
+
 
         static double CountPriceWithWarehouses(List<Distance> distances, List<Flow> flows, string[] warehouses)
         {
