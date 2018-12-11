@@ -43,8 +43,8 @@ namespace Cluster
             //    Console.Write(i);
             //    Console.WriteLine(flows.ElementAt(i).ToString());
             //}
-            Cheapest(distances, flows, Warehouses);
-            // WarehouseOptimization(distances, flows);
+            //Cheapest(distances, flows, Warehouses);
+            WarehouseOptimization(distances, flows);
             Console.ReadKey();
         }
 
@@ -260,8 +260,8 @@ namespace Cluster
 
         private static void WarehouseOptimization(List<Distance> distances, List<Flow> flows)
         {
-            List<String> cities = distances.GroupBy(x => x.Destination)
-                                        .Select(y => y.First().Destination).ToList();
+            List<String> cities = flows.GroupBy(x => x.Load)
+                                        .Select(y => y.First().Load).ToList();
             List<String> Best = new List<string>();
             Random rnd = new Random();
             double Price = Double.MaxValue;
@@ -273,7 +273,7 @@ namespace Cluster
                     int randomNumber = rnd.Next(0, cities.Count);
                     newWarehouses[j] = cities[randomNumber];
                 }
-                double temp = Cheapest(distances, flows, newWarehouses);
+                //double temp = Cheapest(distances, flows, newWarehouses);
                 if (temp < Price)
                 {
                     Price = temp;
