@@ -20,9 +20,9 @@ namespace Cluster
         const string DistancesPath = @"Distances NUTS2-NUTS2.csv";
         const string FlowsPath = @"All flows.csv";
         public bool IsWarehouse = false;
+        
 
-
-
+        
         static void Main(string[] args)
         {
             string[] Warehouses = new string[]{"ES51",
@@ -34,31 +34,21 @@ namespace Cluster
 
             
             List<Distance> distances = ReadExcelDistances();
-<<<<<<< HEAD
-            List<Flow> flows = ReadExcelFlows(ref flowsSize);
-
-            //Console.WriteLine(CountPriceWithoutWarehouses(distances, flows));
-
-            //for (int i = 0; i < flows.Count; i++)
-            //{
-            //    Console.Write(i);
-            //    Console.WriteLine(flows.ElementAt(i).ToString());
-            //}
-            //Cheapest(distances, flows, Warehouses);
-            WarehouseOptimization(distances, flows);
-=======
             List<Flow> flows = ReadExcelFlows();
- 
+            string[] newWarehouses = new string[5];
+            double Price = 0;
 
             double pasKaina = pastatuKaina(distances, Warehouses);
             double kainaBeSandėlių = CountPriceWithoutWarehouses(distances, flows);
             double transportavimoKaina = CountPrice(distances, flows, Warehouses);
+           
             Console.WriteLine("Pirma uzduotis: " + kainaBeSandėlių);
             Console.WriteLine("Transporavimo kaina: " + transportavimoKaina);
             Console.WriteLine("Pastatu kostrukcijos kaina: " + pasKaina);
             Console.WriteLine("(2 uzd) Pilna kaina su kostrukcijos kaina: " + (pasKaina + transportavimoKaina));
             Console.WriteLine("Kiek pinigu issaugota: " + (kainaBeSandėlių - ((pasKaina + transportavimoKaina))));
- 
+            WarehouseOptimization(distances, flows, out newWarehouses, out Price, Warehouses);
+
 
             //Console.WriteLine(CountPriceWithoutWarehouses(distances, flows));
 
@@ -69,7 +59,6 @@ namespace Cluster
             //}
             //   Cheapest(distances, flows, Warehouses);
             //    WarehouseOptimization(distances, flows);
->>>>>>> 2045e90038269bb3136854668509020b616a57d5
             Console.ReadKey();
         }
 
@@ -116,17 +105,10 @@ namespace Cluster
             return flows;
         }
 
-<<<<<<< HEAD
-        public static double CountPriceWithoutWarehouses(List<Distance> distances, Flow flow)
-        {
-            double price = flow.FlowTons * distances.Sum(x => x.Dis) * Sunkvežimio_pristatymo_kaštai;
-            double pollution = flow.FlowTons * distances.Sum(x => x.Dis) * Sunkvežimio_emisijos_lygis;
-=======
         public static double CountPriceWithoutWarehouses(List<Distance> distances, List<Flow> flows)
         {
             double price = flows.Sum(x=> x.FlowTons) * distances.Sum(x => x.Dis) * Sunkvežimio_pristatymo_kaštai;
             double pollution = flows.Sum(x => x.FlowTons) * distances.Sum(x => x.Dis) * Sunkvežimio_emisijos_lygis;
->>>>>>> 2045e90038269bb3136854668509020b616a57d5
             double total = price + pollution;
 
             return total;
@@ -173,49 +155,6 @@ namespace Cluster
 
         //}
 
-<<<<<<< HEAD
-        private static double Cheapest(List<Distance> distances, List<Flow> flows, string[] warehouses)
-        {
-            double totalPrice = 0;
-            double sum = 0;
-            for (int i = 0; i < flows.Count; i++)
-            {
-                if (flows[i].getType() == "Rail" || flows[i].getType() == "Road")
-                {
-                    string start = flows[i].getLoad();
-                    string end = flows[i].getUnload();
-                    double tons = flows[i].getTons();
-                    double curentPrice = 0;
-                    double Price = CountPriceWithoutWarehouses(distances, flows[i]);
-                    totalPrice += Price;
-                    double Cheap = Double.MaxValue;
-                    for (int j = 0; j < distances.Count; j++)
-                    {
-                        if (distances[j].getOrigin().Equals(start))
-                        {
-                            curentPrice += CountPriceWithWarehouses(start, distances[j], tons, warehouses);
-                            if (Price < curentPrice)
-                            {
-                                curentPrice = 0;
-                            }
-                            else
-                            {
-                                start = distances[j].getDestination();
-                                j = 0;
-                                if (start.Equals(end))
-                                {
-                                    if (Cheap >= curentPrice && curentPrice != 0)
-                                    {
-                                        Cheap = curentPrice;
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            j += 271;
-                        }
-=======
         //private static double Cheapest(List<Distance> distances, List<Flow> flows, string[] warehouses)
         //{
         //    double totalPrice = 0;
@@ -253,7 +192,6 @@ namespace Cluster
         //                        }
         //                    }
         //                }
->>>>>>> 2045e90038269bb3136854668509020b616a57d5
 
         //            }
         //            if (Cheap != Double.MaxValue)
@@ -269,54 +207,6 @@ namespace Cluster
   
         //}
 
-<<<<<<< HEAD
-        /*   public double FindPath(Distance start, Distance end, Dictionary<String, Distance> distances, Dictionary<String, Distance> flows, string[] warehouses)
-           {
-               List<String> cities = distances.GroupBy(x => x.Value.Origin)
-                                           .Select(y => y.First().Value.Origin).ToList();
-               string[] prec = new string[cities.Count];
-               double[] d = new double[cities.Count];
-               bool[] a = new bool[cities.Count];
-
-               int index = cities.FindIndex(p => p.Equals(start.Origin));
-               prec[index] = start.Origin;
-               d[index] = 0;
-               a[index] = true;
-
-               int z = a.Where(y => y.Equals(true)).Count();
-               for (int j = 0; j < 3; j++)
-               {
-                   //for (int i = 0; i < cities.Count; i++)
-                   //{
-                   //    string city = cities.ElementAt(i);
-                   //    if (warehouses.Contains(city))
-                   //    {
-                   //        CountPrice(distances[pirmas miestas + "-" + city], [pirmas miestas + "-" + city] + "Rail");
-                   //    }
-                   //    else
-                   //    {
-                   //        CountPrice(distances[pirmas miestas + "-" + city], [pirmas miestas + "-" + city] + "Road");
-                   //    }
-                   //}
-               }
-
-               return 1;
-
-           }*/
-
-
-
-        int FindCostIndex(string start, List<Distance> distances)
-        {
-            string[] cities = distances.GroupBy(x => x.Origin).Select(y => y.First().Origin).ToArray();
-            for (int i = 0; i < cities.Length; i++)
-            {
-                if (cities[i] == start)
-                    return i;
-            }
-            return 99999;
-        }
-=======
         //public static double FindCheapestPath(Distance start, Distance end, List<Distance> distances, List<Flow> flows, string[] warehouses)
         //{
         //    List<String> cities = getCitiesLIst(distances);
@@ -412,7 +302,6 @@ namespace Cluster
         //    }
         //    return 99999;
         //}
->>>>>>> 2045e90038269bb3136854668509020b616a57d5
 
         private static double pastatuKaina(List<Distance> distances, string[] warehouses)
         {
@@ -421,45 +310,42 @@ namespace Cluster
             return price;
         }
 
-      /*  private static void WarehouseOptimization(List<Distance> distances, List<Flow> flows)
+        private static void WarehouseOptimization(List<Distance> distances, List<Flow> flows, out string[] newWarehouses, out double Price, string[] Warehouses)
         {
-            List<String> cities = flows.GroupBy(x => x.Load)
-                                        .Select(y => y.First().Load).ToList();
+            List<String> cities = distances.GroupBy(x => x.Destination)
+                                        .Select(y => y.First().Destination).ToList();
             List<String> Best = new List<string>();
             Random rnd = new Random();
-            double Price = Double.MaxValue;
-            string[] newWarehouses = new string[5];
-<<<<<<< HEAD
-            for (int i = 0; i < 10; i++)
-=======
-            for (int i = 0; i < 200; i++)
->>>>>>> 2045e90038269bb3136854668509020b616a57d5
+            Price = Double.MaxValue;
+            newWarehouses = new string[6];
+            for (int j = 0; j < 5; j++)
             {
-                for (int j = 0; j < 5; j++)
+                Warehouses.CopyTo(newWarehouses, 0);
+                for (int i = 0; i < cities.Count; i++)
                 {
-                    int randomNumber = rnd.Next(0, cities.Count);
-                    newWarehouses[j] = cities[randomNumber];
-                }
-                //double temp = Cheapest(distances, flows, newWarehouses);
-                if (temp < Price)
-                {
-                    Price = temp;
-                    Best = new List<string>();
-                    for (int j = 0; j < 5; j++)
-                    {
-                        Best.Add(newWarehouses[j]);
-                    }
-                    Array.Clear(newWarehouses, 0, newWarehouses.Length);
+                    newWarehouses[j] = cities[i];
 
+                    double temp = CountPrice(distances, flows, newWarehouses);
+                    if (temp < Price)
+                    {
+                        Price = temp;
+                        Best = new List<string>();
+                        for (int k = 0; k < 6; k++)
+                        {
+                            Best.Add(newWarehouses[j]);
+                        }
+                        Array.Clear(newWarehouses, 0, newWarehouses.Length);
+
+                    }
+                    Console.WriteLine(Price);
+                    for (int k = 0; k < Best.Count; k++)
+                    {
+                        Console.WriteLine(Best[k]);
+                    }
+                    Best.Clear();
                 }
-                Console.WriteLine(Price);
-                for (int k = 0; k < Best.Count; k++)
-                {
-                    Console.WriteLine(Best[k]);
-                }
-                Best.Clear();
             }
-        }*/
+        }
 
     }
 }
