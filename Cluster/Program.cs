@@ -38,12 +38,12 @@ namespace Cluster
             string[] newWarehouses = new string[5];
             double Price = 0;
 
-            double distance = distances.Sum(x => x.Dis);
+            double distance = distances.Sum(x => x.getDistance());
             double pasKaina = pastatuKaina(distances, Warehouses);
-            double kainaBeSandėlių = CountPriceWithoutWarehouses(distances, flows, distance);
+            double kainaBeSandėlių = CountPriceWithoutWarehouses(distances, flows);
             double transportavimoKaina = CountPriceWithWarehouses(distances, flows, Warehouses);
 
-            WarehouseOptimization(distances, flows, out newWarehouses, out Price);
+         //   WarehouseOptimization(distances, flows, out newWarehouses, out Price);
 
             Console.WriteLine("Pirma uzduotis: " + kainaBeSandėlių);
             Console.WriteLine("Transporavimo kaina: " + transportavimoKaina);
@@ -76,7 +76,7 @@ namespace Cluster
                     line = reader.ReadLine();
                     values = line.Split(';');
                     Distance distance = new Distance(line);
-                    if (distance.Origin.CompareTo(distance.Destination) != 0)
+                    if (distance.getOrigin().CompareTo(distance.getDestination()) != 0)
                     {
                         distances.Add(distance);
                     }
@@ -97,7 +97,7 @@ namespace Cluster
                     line = reader.ReadLine();
                     values = line.Split(';');
                     Flow flow = new Flow(line);
-                    if (flow.Load.CompareTo(flow.Unload) != 0 && flow.Type.CompareTo("Waterway") != 0)
+                    if (flow.getLoad().CompareTo(flow.getUnload()) != 0 && flow.getType().CompareTo("Waterway") != 0)
                     {
                         flows.Add(flow);
                     }
@@ -106,12 +106,30 @@ namespace Cluster
             return flows;
         }
 
-        public static double CountPriceWithoutWarehouses(List<Distance> distances, List<Flow> flows, double distance)
+        //public static double CountPriceWithoutWarehouses(List<Distance> distances, List<Flow> flows, double distance)
+        //{
+        //    double price = flows.Sum(x=> x.FlowTons) * Sunkvežimio_pristatymo_kaštai;
+        //    double pollution = flows.Where(y => y.Type.Equals("Road")).Sum(x => x.FlowTons) * Sunkvežimio_emisijos_lygis;
+        //    double total = distance* (price + pollution);
+        //    return total;
+        //}
+        public static double CountPriceWithoutWarehouses(List<Distance> distances, List<Flow> flows)
         {
-            double price = flows.Sum(x=> x.FlowTons) * Sunkvežimio_pristatymo_kaštai;
-            double pollution = flows.Sum(x => x.FlowTons) * Sunkvežimio_emisijos_lygis;
-            double total = distance* (price + pollution);
-            return total;
+            double price = 0;
+            for(int j = 0; j < flows.Count; j++)
+            {
+                Flow flow = flows[j];
+                for (int i = 0; i < distances.Count; i++)
+                {
+                    Distance distance = distances[i];
+                    if (distance.getOrigin().Equals(flow.getLoad()) && distance.getDestination().Equals(flow.getUnload()) && flow.getType().Equals("Road"))
+                    {
+                        price += flow.getTons() * Sunkvežimio_pristatymo_kaštai * distance.getDistance();
+                        price += flow.getTons() * Sunkvežimio_emisijos_lygis * distance.getDistance();
+                    }
+                }
+            }
+            return price;
         }
 
         static double CountPriceWithWarehouses(List<Distance> distances, List<Flow> flows, string[] warehouses)
@@ -120,19 +138,19 @@ namespace Cluster
             double expenses = 0;
             for(int i = 0; i < distances.Count; i++)
             {
-                double tons = flows.Where(x => x.Load.Equals(distances[i].Origin)).Sum(y => y.FlowTons);
+                double tons = flows.Where(x => x.getLoad().Equals(distances[i].getOrigin())).Sum(y => y.getTons());
 
-                if (warehouses.Contains(distances[i].Origin) && warehouses.Contains(distances[i].Destination))
+                if (warehouses.Contains(distances[i].getOrigin()) && warehouses.Contains(distances[i].getDestination()))
                 {
                     expenses += (Kintantys_sandėlio_valdymo_kaštai * tons
-                        + tons * distances[i].Dis * Geležinkelio_pristatymo_kaštai
-                        + distances[i].Dis * tons * Traukinio_emisijos_lygis
+                        + tons * distances[i].getDistance() * Geležinkelio_pristatymo_kaštai
+                        + distances[i].getDistance() * tons * Traukinio_emisijos_lygis
                         + Kintantys_sandėlio_statybos_kaštai * tons);
                 }
                 else
                 {
-                    expenses += (Sunkvežimio_pristatymo_kaštai * tons * distances[i].Dis
-                        + distances[i].Dis * Sunkvežimio_emisijos_lygis * tons);
+                    expenses += (Sunkvežimio_pristatymo_kaštai * tons * distances[i].getDistance()
+                        + distances[i].getDistance() * Sunkvežimio_emisijos_lygis * tons);
 
                 }
             }
@@ -149,8 +167,8 @@ namespace Cluster
 
         private static void WarehouseOptimization(List<Distance> distances, List<Flow> flows, out string[] newWarehouses, out double Price)
         {
-            List<String> cities = distances.GroupBy(x => x.Destination)
-                                        .Select(y => y.First().Destination).ToList();
+            List<String> cities = distances.GroupBy(x => x.getDestination())
+                                        .Select(y => y.First().getDestination()).ToList();
             List<String> Best = new List<string>();
             Random rnd = new Random();
             Price = Double.MaxValue;
