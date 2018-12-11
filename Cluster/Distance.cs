@@ -8,12 +8,19 @@ namespace Cluster
 {
     class Distance
     {
-        public string Key { get; set; }
-        public string Origin { get; set; }
-        public string Destination { get; set; }
-        public double Dis { get; set; }
-        public double Time { get; set; }
+        private string Key { get; set; }         //Raktas
+        private string Origin { get; set; }      //Pradinis miestas
+        private string Destination { get; set; } //Galutinis miestas
+        private double Dis { get; set; }         //Atstumas tarp miestu
+        private double Time { get; set; }        //Laikas
 
+        /// <summary>
+        /// Kostruktorius
+        /// </summary>
+        /// <param name="origin">Pradinis miestas</param>
+        /// <param name="destination">Galutinis miestas</param>
+        /// <param name="distance">Atstumas tarp miestu</param>
+        /// <param name="time">Laikas</param>
         public Distance(string origin, string destination, double distance, double time)
         {
             Origin = origin;
@@ -23,6 +30,14 @@ namespace Cluster
             Key = string.Concat(origin, '-', destination);
         }
 
+        /// <summary>
+        /// Konstruktorius
+        /// </summary>
+        /// <param name="key">Raktas</param>
+        /// <param name="origin">Pradinis miestas</param>
+        /// <param name="destination">Galutinis miestas</param>
+        /// <param name="distance">Atstumas tarp miestu</param>
+        /// <param name="time">Laikas</param>
         public Distance(string key, string pradzia, string pabaiga, double kelias, double laikas)
         {
             Key = key;
@@ -32,6 +47,10 @@ namespace Cluster
             Time = laikas;
         }
 
+        /// <summary>
+        /// Nuskaitymas
+        /// </summary>
+        /// <param name="line">Nuskaityta eilute</param>
         public Distance(string line)
         {
             string[] vals = line.Split(',');
@@ -42,6 +61,10 @@ namespace Cluster
             Time = Double.Parse(vals[4]);
         }
 
+        /// <summary>
+        /// ToString metodas
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return string.Format("{0} {1} {2} {3} {4}", Key, Origin, Destination, Dis, Time);
